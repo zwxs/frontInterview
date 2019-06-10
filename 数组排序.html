@@ -19,6 +19,29 @@
 
         document.write(arr + "<br />")
         document.write(arr.sort(sortNumber));// 1 5 10 25 40 1000 从小到大
+
+        function next(){
+          setTimeout(() => {
+              console.log(111);
+          })
+        }
+        async function get(){
+            await next();
+            console.log('输出');
+        }
+        get();
+
+        var a = 1;
+        var obj = {
+            a:2,
+            f:function(){
+                (()=>{
+                    var a = 3;
+                    console.log(this.a);
+                })()
+            }
+        }
+        obj.f();
     </script>
 </body>
 
