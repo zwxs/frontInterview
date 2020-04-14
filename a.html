@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box {
+            padding-left: 200px;
+            padding-right: 100px;
+            height: 100px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .middle {
+            height: 100px;
+        }
+
+        .left {
+            width: 200px;
+            height: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .right {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .div1 {
+            width: 100px;
+            height: 100px;
+            border-radius: 100px 0 0;
+            background: #ff0000;
+
+        }
+
+        .div2 {
+            width: 0;
+            height: 0;
+            border-radius: 100px;
+            border-width: 100px;
+            border-style: solid;
+            border-color: red transparent transparent transparent;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div class="middle"></div>
+        <div class="left"></div>
+        <div class="right"></div>
+    </div>
+    <div class="div1"></div>
+    <div class="div2"></div>
+
+    <script>
+        // var fun = function () {
+
+        // }
+        // fun.prototype = {
+        //     info: {
+        //         name: '张三',
+        //         age: 20
+        //     }
+        // }
+        // var a = new fun();
+        // var b = new fun();
+        // a.info.name = '李四';
+        // b.info.name = '王五';
+        // console.log(a.info.name)
+        // console.log(b.info.name)
+
+        // var fun = function () {
+
+        // }
+        // fun.prototype = {
+        //     name: '张三',
+        //     age: 20
+        // }
+        // var a = new fun();
+        // var b = new fun();
+        // a.name = '李四';
+        // b.name = '王五';
+        // console.log(a.name) // 李四
+        // console.log(b.name) // 王五
+        // // 为何此时打印的a 和 b的name又分别是 李四 和 王五 
+        // // 因为name是普通属性  构造函数创建实例后 原型上的普通属性会继承到实例对象上会形成2个不同的变量 所以a.name 和 b.name 一开始虽然值一样但是他们代表的变量不一样
+        // // 所以赋值改变不同后 a.name 和 b.name的属性是改变后的属性
+
+        // var fun = function () {
+        //     this.info = {
+        //         name: '张三',
+        //         age: 20
+        //     }
+        // }
+
+        // var a = new fun();
+        // var b = new fun();
+        // a.info.name = '李四';
+        // b.info.name = '王五';
+        // console.log(a.info.name)// 李四
+        // console.log(b.info.name)// 王五
+        // // 为何此时打印的又是李四 王五 因为 fun构造函数里面的 this当前实例对象 就是分别是 a 和 b 是两个不一样的实例对象 
+        // // 是分别给实例对象添加info对象属性 那么此时 a.info 和 b.info 是分别属于对象自己的 a.info.name  和 b.info.name也是不同的2个属性
+        // // 所以赋值取值后也是分别的
+
+        //     (function(){
+
+        //         var a = b = 10;
+        //     })();
+
+        //     console.log(b) // 10
+        //     //  为什么是b是10 呢 因为 上面的表达式虽然是写在一个只执行函数里面(闭包函数里面) 理论上 a和b在外面是无法访问到的
+        //     // 但是由于表达式是 var a = b = 10; 其实只声明了a 并没有var声明b 所以a是函数内的局部变量 
+        //     // 但是b由于没有被声明 在非严格模式下 其实是一个全局变量 所以外部也能访问到打印就是10
+        //     (function(){
+        //        'use strict'
+        //        var a = b = 10;
+
+        //    })();
+
+        //    console.log(b) //  报错 b is not defined
+        //    //  为什么是此时都是未定义呢 因为 上面的表达式虽然是写在一个只执行函数里面(闭包函数里面) 理论上 a和b在外面是无法访问到的
+        //    // 但是由于表达式是 var a = b = 10; 其实只声明了a 并没有var声明b 所以a是函数内的局部变量 
+        //    // 但是b由于没有被声明  但是当前模式是严格模式 严格模式下不允许使用未声明的变量 所以b是不存在的 无论在哪里打印都会报错不存在
+
+        //    (function(){
+        //        console.log(typeof foo) // function 为何此时foo打印的是function 因为 函数声明会提前虽然在后面定义的函数foo其实声明会在最前面
+        //        console.log(typeof bar) // undefined  为何此时打印bar是undefined 因为bar是 函数表达式 相当于把函数通过表达式赋值给变量bar 表达式赋值不会提前所以此时还未定义就是undefined
+        //        var foo = 'hello',
+        //        bar = function(){
+        //            return 'world';
+        //        }
+        //        function foo(){
+        //            return 'hello'
+        //        }
+        //    })()
+
+        //     var arr =  document.querySelectorAll('div');
+        //     arr = Array.from(arr)
+        //     console.log(arr)
+        // var x = 20;
+        // var a = {
+        //     x:15,
+        //     fun:function(){
+        //         var x = 30;
+        //         return function(){
+        //             return this.x;
+        //         }
+
+        //     }
+        // }
+        // console.log(a.fun()) //  ƒ (){return this.x;} a.fun的调用后的返回值是一个函数 所以输出就是当前返回的这个函数
+        // console.log((a.fun())()) // 20  a.fun() 调用后返回的函数再被表达式()包裹了起来 然后再调用 就是把当前返回的函数重新调用 但是当前返回的函数并没有赋值给谁那么调用者this指向window window的x是20
+        // console.log(a.fun()()) // 20 a.fun() 调用后返回的函数 然后再调用 就是把当前返回的函数重新调用 但是当前返回的函数并没有赋值给谁那么调用者this指向window window的x是20
+        // console.log(a.fun()() == (a.fun())()) // true 因为两种调用方法返回的结果都是20 所以为true
+        // console.log(a.fun().call(this)); // 20  将返回的函数使用call然后再传入this 此时的this还是window 所以函数里面的this也是window 所以还是外面的20
+        // console.log(a.fun().call(a)); // 15 将返回的函数call然后传入a 此时的函数里面的this指向的 当前对象a a有一个x为15 所以是a的15
+
+        // var num1 = 1;
+        // var num2 = 2;
+        // var num3 = 3;
+        // var num4 = 4;
+
+        // function computed(num1, num2) {
+        //     return function (num) {                
+        //         return num+num1+num2;
+        //     }
+        // }
+
+        // function add(num) {
+        //     return +num;
+        // }
+
+        // function mutiply(num) {
+        //     return -num;
+        // }
+        // console.log(computed(mutiply(num2), add(num3))(num1)); //  num1-num2+num3 == 2
+        // var num1 = 1;
+        // var num2 = 2;
+        // var num3 = 3;
+        // var num4 = 4;
+
+        // function computed(num1, num2,num3) {
+        //     return function (num) {       
+
+        //         return num+num1+num2+num3;
+        //     }
+        // }
+
+        // function add(num) {
+        //     return +num;
+        // }
+
+        // function mutiply(num) {
+        //     return -num;
+        // }
+        // console.log(computed(add(num2),mutiply(num3), add(num4))(num1)); //  num1+num2-num3+num4 == 4
+
+        // var num1 = 1;
+        // var num2 = 2;
+        // var num3 = 3;
+        // var num4 = 4;
+        // // ...args表示把所有单个项参数装在一个数组args里面
+        // function computed(...args) {
+        //     return function (num) {       
+        //         console.log(args)
+        //         // 获取所有参数数组args 遍历  然后累加到num上 
+        //         args.map((item) => {
+        //             num+=item
+        //         })
+        //         // 最后return num
+        //         return num
+        //     }
+        // }
+
+        // function add(num) {
+        //     return +num;
+        // }
+
+        // function mutiply(num) {
+        //     return -num;
+        // }
+        // console.log(computed(add(num2),mutiply(num3), add(num4))(num1)); //  num1+num2-num3+num4 == 4
+
+        class EventEmitter {
+            constructor() {
+                this._events = {}
+            }
+
+            on(event, callback) { //监听event事件，触发时调用callback函数
+                let callbacks = this._events[event] || []
+                callbacks.push(callback)
+                this._events[event] = callbacks
+                return this
+            }
+            off(event, callback) { //停止监听event事件
+                let callbacks = this._events[event]
+                this._events[event] = callbacks && callbacks.filter(fn => fn !== callback)
+                return this
+            }
+            emit(...args) { //触发事件，并把参数传给事件的处理函数
+                const event = args[0]
+                const params = [].slice.call(args, 1)
+                const callbacks = this._events[event]
+                callbacks.forEach(fn => fn.apply(this.params))
+                return this
+            }
+            once(event, callback) { //为事件注册单次监听器
+                let wrapFanc = (...args) => {
+                    callback.apply(this.args)
+                    this.off(event, wrapFanc)
+                }
+                this.on(event, wrapFanc)
+                return this
+            }
+
+        }
+        //测试
+        function query(val) {
+            console.log("query");
+        }
+
+        function query2(val) {
+            console.log("quer2");
+        }
+
+       
+        var emitter = new EventEmitter();
+        console.log(emitter)
+        emitter.on("query", query);
+        emitter.on("query", query2);
+        emitter.emit("query"); // query query2
+        emitter.off("query", query);
+        emitter.emit("query"); // query2
+    </script>
+</body>
+
+</html>
