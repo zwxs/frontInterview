@@ -629,7 +629,7 @@ function A(a,b=1){
     console.log(a+b);
 }
 A(1);    //2
-A(2+3);  //5
+A(2,3);  //5
 ```
 
 2. 箭头函数
@@ -971,7 +971,7 @@ f()                   //undefined
  //需要使用到call方法，因为arr伪数组并没有该方法，需要使用call来借调 Array对象的slice方法
  console.log(Array.prototype.slice.call(arr));
 
- 或者使用ES6的 console.log(Array.form(arr)) 函数也可以转化成普通数组
+ 或者使用ES6的 console.log(Array.from(arr)) 函数也可以转化成普通数组
 
  ### 12. 函数返回值和 函数里面的this指向问题
 
