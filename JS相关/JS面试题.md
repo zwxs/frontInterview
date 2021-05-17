@@ -669,3 +669,138 @@ emitter.emit("query"); // query query2
 emitter.off("query", query);
 emitter.emit("query"); // query2
 ```
+
+### 17. js中的与解析
+
+```js
+1. js 中的声明
+声明就是 变量的声明和函数的声明, 其目的是让 js 解释引擎知道有什么东西.
+声明时不参与运算的, 是不参与执行的, 是在预解析阶段就完成的.
+变量的声明
+
+// 变量的声明就是 var 变量名.
+var num = 123;
+// 这是一个语法糖,可以理解成
+var num;
+num = 123;
+函数的声明
+
+function 函数名 () { ... }
+//  在一个独立于任何语句( 表达式, if 结构, while 结构 等 )的独立结构中, 或函数中出现的代码, 为函数声明.
+2. js 预解析代码如何执行
+js 的代码执行要经理两个步骤, 首先是预解析. 预解析会通读所有代码. 如果发现错误则停下, 如果遇到声明则记录.
+在声明的时候, 如果是变量名的声明, 解析器内部就会记录下这个变量. 如果使用遍历则检查是否有记录.
+
+在声明的时候, 如果是函数声明, 则 解析器会先记录函数的名字( 相当于变量声明 ), 然后将函数的名字与函数体联系在一起.
+
+在预解析中, 如果出现重复声明, 则第一次声明起作用, 其后所有的同名的声明无效.
+
+// 例如:
+  var num = 1;
+  var num = 2;
+// 等价
+  var num = 1;
+  num = 2;
+声明结束后代码就会再从第一句话开始一句一句的执行.
+
+```
+
+### 18. js事件循环机制
+
+在事件循环中，每进行一次循环操作称为 tick，每一次 tick 的任务处理模型是比较复杂的，但关键步骤如下：
+
+在此次 tick 中选择最先进入队列的任务(异步队列)，如果有则执行(一次)
+
+检查是否存在 Microtasks，如果存在则不停地执行，直至清空 Microtasks Queue
+
+更新 render
+
+主线程重复执行上述步骤在上诉tick的基础上需要了解几点：
+
+JS分为同步任务和异步任务
+
+同步任务都在主线程上执行，形成一个执行栈
+
+主线程之外，事件触发线程管理着一个任务队列，只要异步任务有了运行结果，就在任务队列之中放置一个事件。
+
+一旦执行栈中的所有同步任务执行完毕（此时JS引擎空闲），系统就会读取任务队列，将可运行的异步任务添加到可执行栈中，开始执行
+
+### 19. 宏任务与微任务
+
+1. 宏任务
+
+macrotask，可以理解是每次执行栈执行的代码就是一个宏任务（包括每次从事件队列中获取一个事件回调并放到执行栈中执行）。
+
+浏览器为了能够使得JS内部macrotask与DOM任务能够有序的执行，会在一个macrotask执行结束后，在下一个macrotask 执行开始前，对页面进行重新渲染，流程如下：  
+
+macrotask->渲染->macrotask->...    
+
+宏任务包括：script(整体代码)、 setTimeout、 setInterval I/O、 UI交互事件 、postMessage、 MessageChannel、 setImmediate(Node.js 环境)
+
+### 20. 微任务
+
+microtask,可以理解是在当前 task 执行结束后立即执行的任务。也就是说，在当前task任务后，下一个task之前，在渲染之前。
+
+所以它的响应速度相比setTimeout（setTimeout是task）会更快，因为无需等渲染。也就是说，在某一个macrotask执行完后，就会将在它执行期间产生的所有microtask都执行完毕（在渲染前）。
+
+微任务包括： Promise.then  、Object.observe、MutaionObserver、process.nextTick(Node.js 环境)
+
+
+```js
+console.log('begin')
+
+        setTimeout(() => {  
+
+//宏任务
+
+            console.log('setTimeout')
+
+        }, 0);
+
+
+
+        Promise.resolve().then(() => {
+
+//微任务
+
+            console.log('promise');
+
+        });
+
+        console.log('end');
+
+执行结果是 begin  ——>  end  ——> promise ——> setTimeout
+
+```
+
+```js
+
+let con = "<h2>页面渲染</h2>";
+
+        document.write(con);
+
+        console.log(1);
+
+        Promise.resolve().then(()=>{
+
+            console.log('promise  2 ');
+
+            alert('promise then')
+
+        })
+
+        setTimeout(()=>{
+
+            console.log('setTimeout 3');
+
+            alert('setTimeout')
+
+        },0)
+
+        console.log(4)
+
+执行顺序：  1  ——>  4  ——> promise 2 ——> 页面渲染 ——>  setTimeout 3
+
+由此我们可知 微任务 > DOM渲染 > 宏任务
+
+```

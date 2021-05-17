@@ -71,3 +71,102 @@
 }
 
 ```
+
+### 6. CSS选择器优先级
+
+```
+!important，加在样式属性值后，权重值为 10000
+
+
+内联样式，如：style=””，权重值为1000
+
+
+ID选择器，如：#content，权重值为100
+
+
+类，伪类和属性选择器，如： class="content"、:hover 权重值为10
+
+
+标签选择器和伪元素选择器，如：div、p、:before 权重值为1
+
+
+通用选择器（*）、子选择器（>）、相邻选择器（+）、同胞选择器（~）、权重值为0
+
+继承（Inherited） 权重值最低级 只要有人任意其他的选择器都会覆盖(细节)
+```
+
+### 7. flex布局的常用api 
+
+采用 Flex 布局的元素，称为 Flex容器（flex container），简称"容器"。它的所有子元素自动成为容器成员，称为 Flex项目（flex item），简称“项目”。
+1.父元素属性
+| **属性名**      | **属性值**      | **备注** 
+| display        | flex          | 定义了一个flex容器，它的直接子元素会接受这个flex环境         |
+| flex-direction | row,   row-reverse,   column,   column-reverse  | 决定主轴的方向         
+| flex-wrap       | nowrap,   wrap,   wrap-reverse   | 如果一条轴线排不下，如何换行           
+| flex-flow       | [flex-direction] , [flex-wrap] | 是 flex-direction属性和    flex-wrap属性的简写形式，   默认值为 row nowrap |
+| justify-content | flex-start,   flex-end,   center,   space-between,   space-around | 设置或检索弹性盒子元素在主轴（横轴）方向上的对齐方式         |
+| align-items     | flex-start,   flex-end,   center,   baseline,   stretch      | 设置或检索弹性盒子元素在侧轴（纵轴）方向上的对齐方式         |                                 |
+2.子元素属性      |                                                              |         
+| 属性名          | 属性值           | 备注     
+| order           | [int]    | 默认情况下flex order会按照书写顺训呈现，   可以通过order属性改变，   数值小的在前面，还可以是负数。 |
+| flex-grow       | [number]  | 设置或检索弹性盒的扩展比率,   根据弹性盒子元素所设置的扩展因子作为比率来分配剩余空间 |
+| flex-shrink     | [number]  | 设置或检索弹性盒的收缩比率,   根据弹性盒子元素所设置的收缩因子作为比率来收缩空间 |
+| flex-basis      | [length], auto  | 设置或检索弹性盒伸缩基准值                               
+| align-self      | auto,flex-start,flex-end,center,baseline,stretch   | 设置或检索弹性盒子元素在侧轴（纵轴）方向上的对齐方式，   可以覆盖父容器align-items的设置 |
+
+### 8. CSS中实现0.5px边框 解决安卓兼容性问题
+
+```css
+ /*标准1px边框*/
+ .b1{
+ height: 40px;
+ border: 1px solid #ff0000;
+ }
+ /*1.可以利用利用渐变样式=>实现.5px*/
+ .a1{
+ height: 1px;
+ margin-top: 20px;
+ background-image: linear-gradient(0deg, #f00 50%, transparent 50%);
+ }
+ /*2.可以利用缩放-发虚=>实现.5px*/
+ .a2{
+ height: 1px;
+ margin-top: 20px;
+ background-color: #f00;
+ -webkit-transform: scaleY(.5);
+ transform:scaleY(.5);
+ }
+ /*3.四条边框都需要的样式*/
+ .scale-half {
+ margin-top: 20px;
+ height: 100px;
+ border:1px solid #f00;
+ -webkit-transform-origin: 0 0;
+ transform-origin: 0 0;
+ -webkit-transform: scale(.5, .5);
+ transform: scale(.5, .5);
+ }
+ /*4.给伪元素添加设置边框*/
+ .border3{
+ position: relative;
+ }
+ .border3:before{
+ content: '';
+ position: absolute;
+ width: 200%;
+ height: 200%;
+ border: 1px solid blue;
+ -webkit-transform-origin: 0 0;
+ -moz-transform-origin: 0 0;
+ -ms-transform-origin: 0 0;
+ -o-transform-origin: 0 0;
+ transform-origin: 0 0;
+ -webkit-transform: scale(.5, .5);
+ -ms-transform: scale(.5, .5);
+ -o-transform: scale(.5, .5);
+ transform: scale(.5, .5);
+ -webkit-box-sizing: border-box;
+ -moz-box-sizing: border-box;
+ box-sizing: border-box;
+ }
+```

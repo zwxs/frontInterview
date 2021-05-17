@@ -1360,3 +1360,1272 @@ emitter.emit("query"); // query2
 }
 
 ```
+
+
+## 2021-05-17更新 
+
+### 1.ts中的数据类型 
+
+ts必须指定数据类型（给人理解将数据类型分成3种） 
+1.js有的类型
+boolean类型、number类型、string类型、array类型、undefined、null
+2.ts多出的类型
+tuple类型（元组类型）、enum类型（枚举类型）、any类型（任意类型）
+3.特别的类型
+void类型（没有任何类型）表示定义方法没有返回值
+never类型：是其他类型（包括null和undefined）的子类型，代表从不会出现的值
+这意味着声明never变量只能被never类型所赋值
+
+
+```ts
+// 第一种定义array类型方法
+        var arr1:number[] = [1,2,3]
+    // 第二种定义array类型方法
+        var arr2:Array<number> = [11,22,33] 
+
+    // 定义元组类型的方法
+        let arr3:[number,string] = [111,'111']
+
+    // 定义enum枚举类型方法（在程序中用自然语言和计算机状态联系起来，方便理解）
+        enum Flag {success=1,error=2}
+        let s:Flag = Flag.success
+        console.log(s)
+
+        enum Color {red,blue,orange}
+        let num:Color = Color.red
+        console.log(num)
+
+    // 定义any任意类型方法
+        var num1:any = 123
+        num1 = true
+        var obox:any = document.getElementById('box')
+        obox.style.color = 'red'
+
+    // undefined类型
+        var num2:number | undefined
+        console.log(num2)
+
+    // void类型,函数没有返回值
+        function run():void{
+            console.log('run')
+        }
+
+        function run1():number{
+            return 123
+        }
+
+    // never类型定义方法
+        var a:undefined
+        a = undefined
+
+        var b:null
+        b = null
+
+        // var c:never
+        // c = (()=>{
+        //     throw new Error('错误')
+        // })()
+```
+
+### 2. Ts函数
+
+```ts
+1. ts函数定义
+        // es5函数声明
+        function run3(){
+            return 'run'
+        }
+        // es5匿名函数
+        var run4 = function(){
+            return 'run'
+        }
+
+        // ts函数声明
+        function run5():string{
+            return 'run'
+        }
+        // ts匿名函数
+        var run6 = function():number{
+            return 123
+        }
+
+        // ts中定义方法传参
+        function getInfo(name:string,age:number):string{
+            return 'info'+`$(name)---$(age)`
+        }
+        var getInfo1 = function(name:string,age:number):string{
+            return 'info'+`$(name)---$(age)`
+        }
+        // 没有返回值的方法
+        function getInfo2():void{
+            console.log(123)
+        }
+
+
+2.方法可选参数，在参数后面加？变为可选参数，可选参数必须配置到参数的最后面
+
+ function getInfo3(name:string,age?:number):string{
+        if(age){
+            return 'info'+`$(name)---$(age)`
+        }else{
+            return 'info'+`$(name)---年龄保密`
+        }
+    }
+
+3.默认参数 es6和ts都可以设置默认参数
+
+function getInfo4(name:string,age:number=20):string{
+        if(age){
+            return 'info'+`$(name)---$(age)`
+        }else{
+            return 'info'+`$(name)---年龄保密`
+        }
+    }
+    getInfo4('张三',30)
+
+
+4.剩余参数
+
+function sum(a:number,b:number,c:number):number{
+        return a+b+c
+    }
+    sum(1,2,3)
+    // 三点运算符接收传过来的值
+    function sum1(...result:number[]):number{
+        var sum = 0
+        for(var i=0;i<result.length;i++){
+            sum += result[i]
+        }
+        return sum
+    }
+    sum1(1,2,3)
+
+    function sum2(a:number,...result:number[]):number{
+        var sum = 0
+        for(var i=0;i<result.length;i++){
+            sum += result[i]
+        }
+        return a + sum
+    }
+    sum1(1,2,3)
+
+
+5.函数重载
+
+// java重载是指两个或两个以上同名函数，但是函数参数不同，这时候会出现函数重载的情况
+    // ts重载是指通过一个函数提供多个函数定义来试下多种功能的目的
+    function getInfo5(name:string):string
+    function getInfo5(age:number):number
+    function getInfo5(str:any):any{
+        if(typeof str == 'string'){
+            return str
+        }else{
+            return str
+        }
+    }
+    alert(getInfo5(123))
+    // 方法重载可以和函数选择传参一起用
+
+6.箭头函数
+
+setTimeout(function(){
+        alert('run')
+    },1000)
+    setTimeout(()=>{
+        alert('run')
+    },1000)
+```
+
+### 3. Ts中的类
+
+```ts
+    //1.
+    function Person1(name,age){
+        this.name='zhangsan'
+        this.age=20
+        this.run = function(){
+            alert('yundong')
+        }
+    }
+    Person.prototype.sex = '男'
+    Person.prototype.work = function(){
+        alert('work')
+    }
+    var p = new Person1('zhangsan')
+    //2.
+   class Person3{
+       name:string  //属性，前面省略了public关键词
+       constructor(name:string){ //构造函数 实例化类的时候触发的函数
+        this.name = name
+       }
+       getName():string{
+           return this.name
+       }
+       setName(name:string):void{
+           this.name=name
+       }
+   }
+   var p1 = new Person3('zhangsan')
+   
+    // ts实现继承
+    class Person4{
+        name:string
+        constructor(name:string){
+            this.name=name
+        }
+        run():string{
+            return `$(this.name)在运动`
+        }    
+    }
+    // var p2=new Person4('wangwu')
+    // alert(p2.run())
+    class Web4 extends Person4{
+        constructor(name:string){
+            super(name)
+        }
+    }
+    var w = new Web4()
+    alert(w.run())
+
+
+    // 3.类里面的修饰符，ts三种：public（公类、子类、类外面） protected（类外面不能访问） private（子类、类外面不能访问）
+
+    // 4.静态属性 静态方法
+    class Person{
+        name:string
+        constructor(name:string){
+            this.name = name
+        }
+        run(){
+            alert('这是实例方法')
+        }
+        static print(){
+            alert('这是静态方法')
+            // 静态方法没办法直接调用类里面的属性
+        }
+    }
+    var p = new Person('zhangsan')
+    p.run()
+    Person.print()
+```
+
+### 4. Ts中的多态
+
+```ts
+// 父类定义一个方法不去实现，让继承它的子类去实现，每一个子类有不同的表现多态属于继承
+class Animal{
+    name:string
+    constructor(name:string){
+        this.name = name
+    }
+    eat(){
+        console.log('吃的方法')
+    }
+}
+class Dog extends Animal{
+    constructor(name:string){
+        super(name)
+    }
+    eat(){
+        return this.name+'吃肉'
+    }
+}
+class Cat extends Animal{
+    constructor(name:string){
+        super(name)
+    }
+    eat(){
+        return this.name+'吃粮食'
+    }
+}
+```
+
+### 6. Ts中的抽象类
+
+```ts
+// 01.抽象类是提供其他类继承的基类，不能直接被实例化
+// 02.用abstract关键字定义抽象类和抽象方法，抽象类中的抽象方法不包含具体实现并且必须在派生类中实现
+// 03.abstract抽象方法只能在抽象类中
+// 04.抽象类和抽象方法用来定义标准：例如，要求Animal类的子类必须有eat方法
+
+abstract class Animal{
+    name:string
+    constructor(name:string){
+        this.name = name
+    }
+    abstract eat():any
+}
+class Dog extends Animal{
+    constructor(name:any){
+        super(name)
+    }
+    // 抽象类的子类必须实现抽象类里面的方法
+    eat(){
+        console.log(this.name+'吃肉')
+    }
+}
+var d = new Dog('xiaogou')
+d.eat()
+```
+
+### 7. Ts中的接口
+
+接口的作用：在面向对象编程中，接口是一种规范的定义，它定义行为和动作的规范。
+在程序设计里面，接口起到一定的限制和规范作用。接口定义某一些类所遵守的规范，接口不关心这些类的内部状态数据，也不关心类里面方法的实现细节
+它只规定这批类中必须提供某些方法，提供的这些方法就可以满足某些需求。
+ts的接口同时增加更灵活的接口类型，包括属性，函数，可索引和类等。
+
+```ts
+1.属性类接口
+
+  // 对json的约束
+    // function printLabel(label:string):void{
+    //     console.log('printLable')
+    // }
+    // printLabel('hahah')
+    // 自定义方法传入参数对json进行约束
+    function printLable(labelInfo:{lable:string}):void{
+        console.log('printLabel')
+    }
+    printLable({lable:'string'})
+
+2.定义接口对参数进行约束
+
+interface FullName{
+        firstName:string;
+        secondName:string
+    }
+    function printName(name:FullName){
+        console.log(name.firstName+'---'+name.secondName)
+    }
+    var obj = {
+        firstName:'zhang',
+        secondName:'san'
+    }
+    printName(obj)
+
+3.接口：可选属性
+
+interface FullName{
+        firstName:string;
+        secondName?:string
+        // 添加？号之后 secondName可传可不传
+    }
+    function getName(name:FullName){
+        console.log(name.firstName+'---'+name.secondName)
+    }
+    var obj = {
+        firstName:'zhang',
+        secondName:'san'
+    }
+    getName(obj)
+
+ajax接口实践
+interface Config{
+        type:string
+        url:string
+        data?:string
+        dataType:string
+    }
+    function ajax(config:Config){
+        var xhr = new XMLHttpRequest()
+        xhr.open(config.type,config.url,true)
+        xhr.send(config.data)
+        xhr.onreadystatechange=function(){
+            if(xhr.readyState==4&&xhr.status==200){
+                console.log('success')
+            }
+        }
+    }
+    ajax({
+        type:'get'
+        url:'www://http:baidu.com'
+        dataType:'json'
+    })
+```
+
+### 8. TS中的泛型
+
+```ts
+// 1泛型的定义
+// 泛型：在软件工程中，我们不仅要创建一致的定义良好的api，同时也要考虑可重用性。组件不仅能够支持当前的数据类型，还能支持未来的数据类型
+// 在C#和Java这种语言中，可使用泛型来创建可重用的组件，一个组件支持多种类型的数据
+// 2泛型函数
+// T表示泛型，具体什么类型调用这个方法的时候决定的
+function getData<T>(value:T):T{
+    return value
+}
+getData<number>(123)
+// 3泛型类
+// 比如有个最小堆算法，需要同时支持返回数字和字符串两种类型
+// class Minclass{
+//     public list:number[]=[]
+//     add(num){
+//         this.list.push(num)
+//     }
+//     min():number{
+//         var minNum=this.list[0]
+//         for(var i=0;i<this.list.length;i++){
+//             if(minNum>this.list[i]){
+//                 minNum = this.list[i]
+//             }
+//         }
+//         return minNum
+//     }
+// }
+// var m = new Minclass()
+// m.add(2)
+
+class Minclass<T>{
+    public list:T[]=[]
+    add(value:T):void{
+        this.list.push(value)
+    }
+    min():T{
+        var minNum=this.list[0]
+        for(var i=0;i<this.list.length;i++){
+            if(minNum>this.list[i]){
+                minNum = this.list[i]
+            }
+        }
+        return minNum
+    }
+}
+var m = new Minclass()
+m.add(2)
+// 4泛型接口
+// 函数类型接口
+// interface Configfn{
+//     (value1:string,value2:string):string;
+// }
+// var setData:Configfn=function(value1:string,value2:string):string{
+//     return value1+value2
+// }
+// 泛型接口
+interface Configfn{
+    <T>(value:T):T;
+}
+var setData:Configfn=function<T>(value:T):T{
+    return value
+}
+```
+
+### 1. React类组件的生命周期函数
+```js
+
+
+
+组件的生命周期可分成三个状态：
+
+Mounting：已插入真实 DOM
+Updating：正在被重新渲染
+Unmounting：已移出真实 DOM
+生命周期的方法有：
+
+componentWillMount 在渲染前调用,在客户端也在服务端。
+
+componentDidMount : 在第一次渲染后调用，只在客户端。之后组件已经生成了对应的DOM结构，可以通过this.getDOMNode()来进行访问。 如果你想和其他JavaScript框架一起使用，可以在这个方法中调用setTimeout, setInterval或者发送AJAX请求等操作(防止异步操作阻塞UI)。
+
+componentWillReceiveProps 在组件接收到一个新的 prop (更新后)时被调用。这个方法在初始化render时不会被调用。
+
+shouldComponentUpdate 返回一个布尔值。在组件接收到新的props或者state时被调用。在初始化时或者使用forceUpdate时不被调用。
+可以在你确认不需要更新组件时使用。
+
+componentWillUpdate在组件接收到新的props或者state但还没有render时被调用。在初始化时不会被调用。
+
+componentDidUpdate 在组件完成更新后立即调用。在初始化时不会被调用。
+
+componentWillUnmount在组件从 DOM 中移除之前立刻被调用。
+
+```
+
+### 2. React中的Context(上下文) 是什么 怎么使用
+
+1. React.Context上下文就是解决React父子组件之间公共数据传输的一个APi 
+减少组件之间公共数据的重复传参 和 多级嵌套传参的问题
+但是又不想使用Redux等太复杂的库时使用Context上下文用来管理全局状态
+
+```jsx
+import React from 'react'
+
+// 创建 Context 填入默认值（任何一个 js 变量）
+const ThemeContext = React.createContext('light')
+
+// 底层组件 - 函数是组件
+function ThemeLink (props) {
+    // const theme = this.context // 会报错。函数式组件没有实例，即没有 this
+
+    // 函数式组件可以使用 Consumer
+    return <ThemeContext.Consumer>
+        { value => <p>link's theme is {value}</p> }
+    </ThemeContext.Consumer>
+}
+
+// 底层组件 - class 组件
+class ThemedButton extends React.Component {
+    // 指定 contextType 读取当前的 theme context。
+    // static contextType = ThemeContext // 也可以用 ThemedButton.contextType = ThemeContext
+    render() {
+        const theme = this.context // React 会往上找到最近的 theme Provider，然后使用它的值。
+        return <div>
+            <p>button's theme is {theme}</p>
+        </div>
+    }
+}
+ThemedButton.contextType = ThemeContext // 指定 contextType 读取当前的 theme context。
+
+// 中间的组件再也不必指明往下传递 theme 了。
+function Toolbar(props) {
+    return (
+        <div>
+            <ThemedButton />
+            <ThemeLink />
+        </div>
+    )
+}
+
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            theme: 'light'
+        }
+    }
+    render() {
+        return <ThemeContext.Provider value={this.state.theme}>
+            <Toolbar />
+            <hr/>
+            <button onClick={this.changeTheme}>change theme</button>
+        </ThemeContext.Provider>
+    }
+    changeTheme = () => {
+        this.setState({
+            theme: this.state.theme === 'light' ? 'dark' : 'light'
+        })
+    }
+}
+
+export default App
+
+```
+
+### 3. React Hooks常用APi
+
+1. useState
+
+useState 的使用非常简单，我们从 React 中拿到 useState 后，只需要在使用的地方直接调用 useState 函数就可以， useState 会返回一个数组，第一个值是我们的 state， 第二个值是一个函数，用来修改该 state 的，那么这里为什么叫 count 和 setCount？一定要叫这个吗，这里使用了 es6 的解构赋值，所以你可以给它起任何名字：如updateCount, doCount、any thing，当然，为了编码规范，所以建议统一使用一种命名规范，尤其是第二个值
+
+```jsx
+
+function App () {
+  const [ count, setCount ] = useState(0)
+  return (
+    <div>
+      点击次数: { count } 
+      <button onClick={() => { setCount(count + 1)}}>点我</button>
+    </div>
+  )
+}
+```
+
+我们在使用 useState 的第二个参数时，我们想要获取上一轮该 state 的值的话，只需要在 useState 返回的第二个参数，也就是我们上面的例子中的 setCount 使用时，传入一个参数，该函数的参数就是上一轮的 state 的值
+
+setCount((count => count + 1)
+
+2. useEffect
+
+Effect Hook 可以让你在函数组件中执行副作用操作，这里提到副作用，什么是副作用呢，就是除了状态相关的逻辑，比如网络请求，监听事件，查找 dom
+
+```jsx
+function App () {
+  const [ count, setCount ] = useState(0)
+ 
+  useEffect(() => {
+    document.title = count
+  })
+ 
+  return (
+    <div>
+      页面名称: { count } 
+      <button onClick={() => { setCount(count + 1 )}}>点我</button>
+    </div>
+    )
+}
+```
+
+useEffect如何模拟生命周期组件加载组件销毁
+
+```jsx
+    useEffect(() => {
+      // 相当于 componentDidMount
+      console.log('add resize event')
+      window.addEventListener('resize', onChange, false)
+ 
+      return () => {
+        // 相当于 componentWillUnmount
+        window.removeEventListener('resize', onChange, false)
+      }
+    }, [])
+ 
+    useEffect(() => {
+      // 相当于 componentDidUpdate
+      document.title = count
+    })
+
+```
+
+3. useContext 
+```jsx
+
+// 创建一个 context
+const Context = createContext(0)
+ 
+// 组件一, Consumer 写法
+class Item1 extends Component {
+  render () {
+    return (
+      <Context.Consumer>
+        {
+          (count) => (<div>{count}</div>)
+        }
+      </Context.Consumer>
+    )
+  }
+}
+// 组件二, contextType 写法
+class Item2 extends Component {
+  static contextType = Context
+  render () {
+    const count = this.context
+    return (
+      <div>{count}</div>
+    )
+  }
+}
+// 组件一, useContext 写法
+function Item3 () {
+  const count = useContext(Context);
+  return (
+    <div>{ count }</div>
+  )
+}
+ 
+function App () {
+  const [ count, setCount ] = useState(0)
+  return (
+    <div>
+      点击次数: { count } 
+      <button onClick={() => { setCount(count + 1)}}>点我</button>
+      <Context.Provider value={count}>
+        <Item1></Item1>
+        <Item2></Item2>
+        <Item3></Item3>
+      </Context.Provider>
+    </div>
+    )
+}
+```
+
+4. useMemo
+
+useMemo 是什么呢，它跟 memo 有关系吗 ，说白了 memo 就是函数组件的 PureComponent，用来做性能优化的手段，useMemo 也是，useMemo 在我的印象中和 Vue 的 computed 计算属性类似，都是根据依赖的值计算出结果，当依赖的值未发生改变的时候，不触发状态改变
+
+```jsx
+function App () {
+  const [ count, setCount ] = useState(0)
+  const add = useMemo(() => {
+    return count + 1
+  }, [count])
+  return (
+    <div>
+      点击次数: { count }
+      <br/>
+      次数加一: { add }
+      <button onClick={() => { setCount(count + 1)}}>点我</button>
+    </div>
+    )
+}
+```
+
+上面的例子中，useMemo 也支持传入第二个参数，用法和 useEffect 类似
+
+不传数组，每次更新都会重新计算
+空数组，只会计算一次
+依赖对应的值，当对应的值发生变化时，才会重新计算(可以依赖另外一个 useMemo 返回的值)
+需要注意的是，useMemo 会在渲染的时候执行，而不是渲染之后执行，这一点和 useEffect 有区别，所以 useMemo 不建议有 副作用相关的逻辑
+
+同时，useMemo 可以作为性能优化的手段，但不要把它当成语义上的保证，将来，React 可能会选择“遗忘”以前的一些 memoized 值，并在下次渲染时重新计算它们
+
+5. useCallback
+
+useCallback 是什么呢，可以说是 useMemo 的语法糖，能用 useCallback 实现的，都可以使用 useMemo, 在 react 中我们经常面临一个子组件渲染优化的问题， 尤其是在向子组件传递函数props时，每次 render 都会创建新函数，导致子组件不必要的渲染，浪费性能，这个时候，就是 useCallback 的用武之地了，useCallback 可以保证，无论 render 多少次，我们的函数都是同一个函数，减小不断创建的开销
+
+```jsx
+const onClick = useMemo(() => {
+  return () => {
+    console.log('button click')
+  }
+}, [])
+ 
+const onClick = useCallback(() => {
+ console.log('button click')
+}, [])
+```
+
+useCallback 的第二个参数和useMemo一样，没有区别
+
+6. useRef
+
+useRef 有什么作用呢，其实很简单，总共有两种用法
+
+获取子组件的实例(只有类组件可用)
+在函数组件中的一个全局变量，不会因为重复 render 重复申明， 类似于类组件的 this.xxx
+
+```jsx
+// 使用 ref 子组件必须是类组件
+class Children extends PureComponent {
+  render () {
+    const { count } = this.props
+    return (
+      <div>{ count }</div>
+    )
+  }
+}
+ 
+function App () {
+  const [ count, setCount ] = useState(0)
+  const childrenRef = useRef(null)
+  // const 
+  const onClick = useMemo(() => {
+    return () => {
+      console.log('button click')
+      console.log(childrenRef.current)
+      setCount((count) => count + 1)
+    }
+  }, [])
+  return (
+    <div>
+      点击次数: { count }
+      <Children ref={childrenRef}  count={count}></Children>
+      <button onClick={onClick}>点我</button>
+    </div>
+    )
+}
+```
+
+使用useRef来保存state的值
+
+```jsx
+
+
+function App () {
+  const [ count, setCount ] = useState(0)
+  const timer = useRef(null)
+  let timer2 
+  
+  useEffect(() => {
+    let id = setInterval(() => {
+      setCount(count => count + 1)
+    }, 500)
+ 
+    timer.current = id
+    timer2 = id
+    return () => {
+      clearInterval(timer.current)
+    }
+  }, [])
+ 
+  const onClickRef = useCallback(() => {
+    clearInterval(timer.current)
+  }, [])
+ 
+  const onClick = useCallback(() => {
+    clearInterval(timer2)
+  }, [])
+ 
+  return (
+    <div>
+      点击次数: { count }
+      <button onClick={onClick}>普通</button>
+      <button onClick={onClickRef}>useRef</button>
+    </div>
+    )
+}
+```
+
+当我们们使用普通的按钮去暂停定时器时发现定时器无法清除，因为 App 组件每次 render，都会重新申明一次 timer2, 定时器的 id 在第二次 render 时，就丢失了，所以无法清除定时器，针对这种情况，就需要使用到 useRef，来为我们保留定时器 id，类似于 this.xxx，这就是 useRef 的另外一种用法
+
+7. useReducer
+
+useReducer 是什么呢，它其实就是类似 redux 中的功能，相较于 useState，它更适合一些逻辑较复杂且包含多个子值，或者下一个 state 依赖于之前的 state 等等的特定场景， useReducer 总共有三个参数
+
+1. 第一个参数是 一个 reducer，就是一个函数类似 (state, action) => newState 的函数，传入 上一个 state 和本次的 action
+2. 第二个参数是初始 state，也就是默认值，是比较简单的方法
+3. 第三个参数是惰性初始化，这么做可以将用于计算 state 的逻辑提取到 reducer 外部，这也为将来对重置 state 的 action 做处理提供了便利
+
+```jsx
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return {count: state.count + 1};
+    case 'decrement':
+      return {count: state.count - 1};
+    default:
+      throw new Error();
+  }
+}
+ 
+function App() {
+  const [state, dispatch] = useReducer(reducer, {
+    count: 0
+  });
+  return (
+    <>
+      点击次数: {state.count}
+      <button onClick={() => dispatch({type: 'increment'})}>+</button>
+      <button onClick={() => dispatch({type: 'decrement'})}>-</button>
+    </>
+  );
+}
+```
+
+
+### 17. js中的与解析
+
+```js
+1. js 中的声明
+声明就是 变量的声明和函数的声明, 其目的是让 js 解释引擎知道有什么东西.
+声明时不参与运算的, 是不参与执行的, 是在预解析阶段就完成的.
+变量的声明
+
+// 变量的声明就是 var 变量名.
+var num = 123;
+// 这是一个语法糖,可以理解成
+var num;
+num = 123;
+函数的声明
+
+function 函数名 () { ... }
+//  在一个独立于任何语句( 表达式, if 结构, while 结构 等 )的独立结构中, 或函数中出现的代码, 为函数声明.
+2. js 预解析代码如何执行
+js 的代码执行要经理两个步骤, 首先是预解析. 预解析会通读所有代码. 如果发现错误则停下, 如果遇到声明则记录.
+在声明的时候, 如果是变量名的声明, 解析器内部就会记录下这个变量. 如果使用遍历则检查是否有记录.
+
+在声明的时候, 如果是函数声明, 则 解析器会先记录函数的名字( 相当于变量声明 ), 然后将函数的名字与函数体联系在一起.
+
+在预解析中, 如果出现重复声明, 则第一次声明起作用, 其后所有的同名的声明无效.
+
+// 例如:
+  var num = 1;
+  var num = 2;
+// 等价
+  var num = 1;
+  num = 2;
+声明结束后代码就会再从第一句话开始一句一句的执行.
+
+```
+
+### 18. js事件循环机制
+
+在事件循环中，每进行一次循环操作称为 tick，每一次 tick 的任务处理模型是比较复杂的，但关键步骤如下：
+
+在此次 tick 中选择最先进入队列的任务(异步队列)，如果有则执行(一次)
+
+检查是否存在 Microtasks，如果存在则不停地执行，直至清空 Microtasks Queue
+
+更新 render
+
+主线程重复执行上述步骤在上诉tick的基础上需要了解几点：
+
+JS分为同步任务和异步任务
+
+同步任务都在主线程上执行，形成一个执行栈
+
+主线程之外，事件触发线程管理着一个任务队列，只要异步任务有了运行结果，就在任务队列之中放置一个事件。
+
+一旦执行栈中的所有同步任务执行完毕（此时JS引擎空闲），系统就会读取任务队列，将可运行的异步任务添加到可执行栈中，开始执行
+
+### 19. 宏任务与微任务
+
+1. 宏任务
+
+macrotask，可以理解是每次执行栈执行的代码就是一个宏任务（包括每次从事件队列中获取一个事件回调并放到执行栈中执行）。
+
+浏览器为了能够使得JS内部macrotask与DOM任务能够有序的执行，会在一个macrotask执行结束后，在下一个macrotask 执行开始前，对页面进行重新渲染，流程如下：  
+
+macrotask->渲染->macrotask->...    
+
+宏任务包括：script(整体代码)、 setTimeout、 setInterval I/O、 UI交互事件 、postMessage、 MessageChannel、 setImmediate(Node.js 环境)
+
+### 20. 微任务
+
+microtask,可以理解是在当前 task 执行结束后立即执行的任务。也就是说，在当前task任务后，下一个task之前，在渲染之前。
+
+所以它的响应速度相比setTimeout（setTimeout是task）会更快，因为无需等渲染。也就是说，在某一个macrotask执行完后，就会将在它执行期间产生的所有microtask都执行完毕（在渲染前）。
+
+微任务包括： Promise.then  、Object.observe、MutaionObserver、process.nextTick(Node.js 环境)
+
+
+```js
+console.log('begin')
+
+        setTimeout(() => {  
+
+//宏任务
+
+            console.log('setTimeout')
+
+        }, 0);
+
+
+
+        Promise.resolve().then(() => {
+
+//微任务
+
+            console.log('promise');
+
+        });
+
+        console.log('end');
+
+执行结果是 begin  ——>  end  ——> promise ——> setTimeout
+
+```
+
+```js
+
+let con = "<h2>页面渲染</h2>";
+
+        document.write(con);
+
+        console.log(1);
+
+        Promise.resolve().then(()=>{
+
+            console.log('promise  2 ');
+
+            alert('promise then')
+
+        })
+
+        setTimeout(()=>{
+
+            console.log('setTimeout 3');
+
+            alert('setTimeout')
+
+        },0)
+
+        console.log(4)
+
+执行顺序：  1  ——>  4  ——> promise 2 ——> 页面渲染 ——>  setTimeout 3
+
+由此我们可知 微任务 > DOM渲染 > 宏任务
+
+```
+
+### 浏览器的回流与重绘 (Reflow & Repaint)
+
+1. 回流重绘的概念
+
+浏览器使用流式布局模型 (Flow Based Layout)。
+浏览器会把HTML解析成DOM，把CSS解析成CSSOM，DOM和CSSOM合并就产生了Render Tree。
+有了RenderTree，我们就知道了所有节点的样式，然后计算他们在页面上的大小和位置，最后把节点绘制到页面上。
+由于浏览器使用流式布局，对Render Tree的计算通常只需要遍历一次就可以完成，但table及其内部元素除外，他们可能需要多次计算，通常要花3倍于同等元素的时间，这也是为什么要避免使用table布局的原因之一。
+
+一句话：回流必将引起重绘，重绘不一定会引起回流。
+
+当Render Tree中部分或全部元素的尺寸、结构、或某些属性发生改变时，浏览器重新渲染部分或全部文档的过程称为回流
+
+2. 回流 的常见场景
+
+页面首次渲染
+浏览器窗口大小发生改变
+元素尺寸或位置发生改变
+元素内容变化（文字数量或图片大小等等）
+元素字体大小变化
+添加或者删除可见的DOM元素
+激活CSS伪类（例如：:hover）
+查询某些属性或调用某些方法
+
+一些常用且会导致回流的属性和方法：
+
+clientWidth、clientHeight、clientTop、clientLeft
+offsetWidth、offsetHeight、offsetTop、offsetLeft
+scrollWidth、scrollHeight、scrollTop、scrollLeft
+scrollIntoView()、scrollIntoViewIfNeeded()
+getComputedStyle()
+getBoundingClientRect()
+scrollTo()
+
+3. 重绘 (Repaint)
+当页面中元素样式的改变并不影响它在文档流中的位置时（例如：color、background-color、visibility等），浏览器会将新样式赋予给元素并重新绘制它，这个过程称为重绘。
+
+4. 性能影响
+回流比重绘的代价要更高。
+有时即使仅仅回流一个单一的元素，它的父元素以及任何跟随它的元素也会产生回流。
+现代浏览器会对频繁的回流或重绘操作进行优化：
+浏览器会维护一个队列，把所有引起回流和重绘的操作放入队列中，如果队列中的任务数量或者时间间隔达到一个阈值的，浏览器就会将队列清空，进行一次批处理，这样可以把多次回流和重绘变成一次。
+当你访问以下属性或方法时，浏览器会立刻清空队列：
+
+clientWidth、clientHeight、clientTop、clientLeft
+offsetWidth、offsetHeight、offsetTop、offsetLeft
+scrollWidth、scrollHeight、scrollTop、scrollLeft
+width、height
+getComputedStyle()
+getBoundingClientRect()
+
+因为队列中可能会有影响到这些属性或方法返回值的操作，即使你希望获取的信息与队列中操作引发的改变无关，浏览器也会强行清空队列，确保你拿到的值是最精确的。
+
+5. 减少回流重绘的优化方案
+
+CSS
+
+避免使用table布局。
+尽可能在DOM树的最末端改变class。
+避免设置多层内联样式。
+将动画效果应用到position属性为absolute或fixed的元素上。
+避免使用CSS表达式（例如：calc()）。
+
+JavaScript
+
+避免频繁操作样式，最好一次性重写style属性，或者将样式列表定义为class并一次性更改class属性。
+避免频繁操作DOM，创建一个documentFragment，在它上面应用所有DOM操作，最后再把它添加到文档中。
+也可以先为元素设置display: none，操作结束后再把它显示出来。因为在display属性为none的元素上进行的DOM操作不会引发回流和重绘。
+避免频繁读取会引发回流/重绘的属性，如果确实需要多次使用，就用一个变量缓存起来。
+对具有复杂动画的元素使用绝对定位，使它脱离文档流，否则会引起父元素及后续元素频繁回流。
+
+
+
+### 10. 反射 Reflection
+
+1. 为什么需要反射 ?很多强类型语言长期以来都有其反射(Reflection)API（如 Python 或 C#），而 JavaScript 作为一种动态语言，则几乎用不着反射。在 ES6 特性里引入的少量扩展之处中，允许开发者用Proxy访问此前的一些语言内部行为就算得上一项。你可能会反驳，尽管在规范和社区中没有明确那么称呼过，但 JS 在 ES5 中已经有反射特性了。诸如 Array.isArray, Object.getOwnPropertyDescriptor, 甚至 Object.keys 这些，在其他语言中都是典型的被列为反射的方法。而内置的 Reflect 对象则更进了一步，将这些方法归纳在一起。这很有用，是吧？为什么要用超类 Object的静态反射方法(如getOwnPropertyDescriptor或 create)呢？毕竟Object表示一个基本原型更合适，而不是成为反射方法的仓库。用一个专有接口暴露更多反射方法更有意义。
+
+2. Reflect的语法 返回值 vs 通过 Object 反射
+
+```js
+// 和 Object 中等价的 Reflect 反射方法同时也提供了更有意义的返回值。比如，Reflect.defineProperty方法返回一个布尔值，表示属性是否被成功定义；而对应的Object.defineProperty则返回其首个参数中接收到的对象 -- 这并不是很有用。举例来说，以下代码演示了Object.defineProperty如何工作
+
+try {
+  Object.defineProperty(target, 'foo', { value: 'bar' })
+  // yay!
+} catch (e) {
+  // oops.
+}
+// 相反，用Reflect.defineProperty就会感觉自然得多：
+var yay = Reflect.defineProperty(target, 'foo', { value: 'bar' })
+if (yay) {
+  // yay!
+} else {
+  // oops.
+}
+// 这种方法免去了使用try/catch 代码块，并使得代码更易维护。
+```
+
+
+### 6. CSS选择器优先级
+
+```
+!important，加在样式属性值后，权重值为 10000
+
+
+内联样式，如：style=””，权重值为1000
+
+
+ID选择器，如：#content，权重值为100
+
+
+类，伪类和属性选择器，如： class="content"、:hover 权重值为10
+
+
+标签选择器和伪元素选择器，如：div、p、:before 权重值为1
+
+
+通用选择器（*）、子选择器（>）、相邻选择器（+）、同胞选择器（~）、权重值为0
+
+继承（Inherited） 权重值最低级 只要有人任意其他的选择器都会覆盖(细节)
+```
+
+### 7. flex布局的常用api 
+
+采用 Flex 布局的元素，称为 Flex容器（flex container），简称"容器"。它的所有子元素自动成为容器成员，称为 Flex项目（flex item），简称“项目”。
+1.父元素属性
+| **属性名**      | **属性值**      | **备注** 
+| display        | flex          | 定义了一个flex容器，它的直接子元素会接受这个flex环境         |
+| flex-direction | row,   row-reverse,   column,   column-reverse  | 决定主轴的方向         
+| flex-wrap       | nowrap,   wrap,   wrap-reverse   | 如果一条轴线排不下，如何换行           
+| flex-flow       | [flex-direction] , [flex-wrap] | 是 flex-direction属性和    flex-wrap属性的简写形式，   默认值为 row nowrap |
+| justify-content | flex-start,   flex-end,   center,   space-between,   space-around | 设置或检索弹性盒子元素在主轴（横轴）方向上的对齐方式         |
+| align-items     | flex-start,   flex-end,   center,   baseline,   stretch      | 设置或检索弹性盒子元素在侧轴（纵轴）方向上的对齐方式         |                                 |
+2.子元素属性      |                                                              |         
+| 属性名          | 属性值           | 备注     
+| order           | [int]    | 默认情况下flex order会按照书写顺训呈现，   可以通过order属性改变，   数值小的在前面，还可以是负数。 |
+| flex-grow       | [number]  | 设置或检索弹性盒的扩展比率,   根据弹性盒子元素所设置的扩展因子作为比率来分配剩余空间 |
+| flex-shrink     | [number]  | 设置或检索弹性盒的收缩比率,   根据弹性盒子元素所设置的收缩因子作为比率来收缩空间 |
+| flex-basis      | [length], auto  | 设置或检索弹性盒伸缩基准值                               
+| align-self      | auto,flex-start,flex-end,center,baseline,stretch   | 设置或检索弹性盒子元素在侧轴（纵轴）方向上的对齐方式，   可以覆盖父容器align-items的设置 |
+
+### 8. CSS中实现0.5px边框 解决安卓兼容性问题
+
+```css
+ /*标准1px边框*/
+ .b1{
+ height: 40px;
+ border: 1px solid #ff0000;
+ }
+ /*1.可以利用利用渐变样式=>实现.5px*/
+ .a1{
+ height: 1px;
+ margin-top: 20px;
+ background-image: linear-gradient(0deg, #f00 50%, transparent 50%);
+ }
+ /*2.可以利用缩放-发虚=>实现.5px*/
+ .a2{
+ height: 1px;
+ margin-top: 20px;
+ background-color: #f00;
+ -webkit-transform: scaleY(.5);
+ transform:scaleY(.5);
+ }
+ /*3.四条边框都需要的样式*/
+ .scale-half {
+ margin-top: 20px;
+ height: 100px;
+ border:1px solid #f00;
+ -webkit-transform-origin: 0 0;
+ transform-origin: 0 0;
+ -webkit-transform: scale(.5, .5);
+ transform: scale(.5, .5);
+ }
+ /*4.给伪元素添加设置边框*/
+ .border3{
+ position: relative;
+ }
+ .border3:before{
+ content: '';
+ position: absolute;
+ width: 200%;
+ height: 200%;
+ border: 1px solid blue;
+ -webkit-transform-origin: 0 0;
+ -moz-transform-origin: 0 0;
+ -ms-transform-origin: 0 0;
+ -o-transform-origin: 0 0;
+ transform-origin: 0 0;
+ -webkit-transform: scale(.5, .5);
+ -ms-transform: scale(.5, .5);
+ -o-transform: scale(.5, .5);
+ transform: scale(.5, .5);
+ -webkit-box-sizing: border-box;
+ -moz-box-sizing: border-box;
+ box-sizing: border-box;
+ }
+```
+
+
+### localStorage如何设置过期时间  如何封装自定义localStorage
+
+1. 创建Storage类
+- 定义 对应的get set remove clear api
+- 通过set函数添加过期时间参数来实现过期时间的记录
+- 设置存储时存储当前值和过期时间
+- get取值的时候先验证当前值是否存在 以及时间是否大于过期时间 如果存在且不大于过期时间既可返回对应的值否则返回空
+
+
+```js
+class Storage {
+    constructor() {
+        this.storageName = 'expiredStorage'
+    }
+    
+    
+    /**
+     *  设置缓存
+     *  @param {string} name 缓存名称
+     *  @param {any} value 缓存的值
+     *  @param {any} expires 缓存过期时间(秒) 
+    **/
+    set(name, value, expires) {
+        const storages ={}
+        storages[name] = {
+            value,
+            expires: storages[name]
+                ? storages[name].expires
+                : expires === undefined
+                ? +new Date() + 31536000000 //默认365天 这个值可以自己修改
+                : expires * 1000 + +new Date(),
+        };
+        localStorage.setItem(this.storageName, JSON.stringify(storages))
+    }
+    
+    /**
+     *  获取缓存
+     *  @param {string} name 缓存名称
+    **/
+    get(name) {
+        const storages = JSON.parse(localStorage.getItem(this.storageName))
+        try {
+            if (!storages[name]) {
+                // 不存在
+                return null;
+            }
+            console.log('log=====',  storages[name].expires - new Date());
+            if (+new Date() > storages[name].expires) {
+                // 存在但过期
+                this.remove(name);
+                return null;
+            }
+            return storages[name].value;
+        } catch (error) {
+            console.log('[ControlStorage] the error message: get field failed\n', error);
+        }
+    }
+    
+   /**
+     *  移除对应缓存
+     *  @param {string} name 缓存名称
+    **/
+    remove(name) {
+        const storages = JSON.parse(localStorage.getItem(this.storageName))
+        try {
+            delete storages[name];
+            if (JSON.stringify(storages) === '{}') {
+            // 缓存字段为空对象时，删除该字段
+            this.clear();
+            return;
+        }
+        this.baseStorage.setItem(storages);
+        } catch (error) {
+            console.log('[ControlStorage] the error message: remove field failed\n', error);
+        }
+    }
+    /**
+     *  清除所有带过期时间的缓存
+    **/
+    clear() {
+        localStorage.removeItem(this.storageName)
+    }
+}
+
+export default new Storage();
+```
+
+2. 实际调用 引入对应的Storage类 调用里面的方法传递对应参数
+
+```js
+import storage from './js/storage.js'
+
+...
+setStorage() {
+    // 5秒过期
+	storage.set('name', 'ghkmmm', 5)
+},
+getStorage() {
+    console.log(storage.get('name'))
+},
+removeStorage() {
+	storage.remove('name')
+},
+```

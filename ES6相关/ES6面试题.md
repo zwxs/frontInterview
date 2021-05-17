@@ -11,6 +11,7 @@
 6. Promise
 7. 解构赋值
 8. 展开运算符(...运算符)
+9. Reflection反射
 
 ### 2. let count的详解
 
@@ -269,8 +270,27 @@ f()                   //undefined
 ```
 
 
+### 10. 反射 Reflection
 
+1. 为什么需要反射 ?很多强类型语言长期以来都有其反射(Reflection)API（如 Python 或 C#），而 JavaScript 作为一种动态语言，则几乎用不着反射。在 ES6 特性里引入的少量扩展之处中，允许开发者用Proxy访问此前的一些语言内部行为就算得上一项。你可能会反驳，尽管在规范和社区中没有明确那么称呼过，但 JS 在 ES5 中已经有反射特性了。诸如 Array.isArray, Object.getOwnPropertyDescriptor, 甚至 Object.keys 这些，在其他语言中都是典型的被列为反射的方法。而内置的 Reflect 对象则更进了一步，将这些方法归纳在一起。这很有用，是吧？为什么要用超类 Object的静态反射方法(如getOwnPropertyDescriptor或 create)呢？毕竟Object表示一个基本原型更合适，而不是成为反射方法的仓库。用一个专有接口暴露更多反射方法更有意义。
 
+2. Reflect的语法 返回值 vs 通过 Object 反射
 
+```js
+// 和 Object 中等价的 Reflect 反射方法同时也提供了更有意义的返回值。比如，Reflect.defineProperty方法返回一个布尔值，表示属性是否被成功定义；而对应的Object.defineProperty则返回其首个参数中接收到的对象 -- 这并不是很有用。举例来说，以下代码演示了Object.defineProperty如何工作
 
-
+try {
+  Object.defineProperty(target, 'foo', { value: 'bar' })
+  // yay!
+} catch (e) {
+  // oops.
+}
+// 相反，用Reflect.defineProperty就会感觉自然得多：
+var yay = Reflect.defineProperty(target, 'foo', { value: 'bar' })
+if (yay) {
+  // yay!
+} else {
+  // oops.
+}
+// 这种方法免去了使用try/catch 代码块，并使得代码更易维护。
+```
